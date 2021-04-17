@@ -1,9 +1,5 @@
 const fs = require('fs');
-
-const {createReadStream, createWriteStream} = require("fs");
-const { Stream } = require('stream');
-
-
+var ffmpeg = require('fluent-ffmpeg');
 // Take in the request & filepath, stream the file to the filePath
 const uploadFile = (req, filePath) => {
     return new Promise((resolve, reject) => {
@@ -37,7 +33,42 @@ const uploadFile = (req, filePath) => {
      });
     });
    };
-module.exports = {
+
+   const gwnerateThumbnail = (req, videoPath) => {
+    let fileName = ""
+    let fileDuration = ""
     
-    uploadFile
+    ffmpeg.ffprobe(videoPath, function(err, metadata) {
+        console.log(err)
+        console.dir(metadata); // all metadata
+        console.log(metadata.format.duration);
+        fileDuration = metadata.format.duration
+    });
+    return new Promise((resolve, reject) => {
+    ffmpeg(videoPath)
+        .on('filenames', function (filenames) {
+            console.log('Will generate ' + filenames.join(', '))
+            console.log(filenames)
+            fileName = filenames[0]
+            filePath = "uploads/thumbnails/" + filenames[0]
+        })
+        .on('end', function () {
+            console.log('Screenshots taken');
+            resolve({ url: filePath, fileName: fileName, fileDuration: fileDuration });
+        })
+        .on('error', function (err) {
+            console.error(err);
+            reject(err);
+        })
+        .screenshots({
+            count: 1,
+            folder: 'uploads/thumbnails',
+            size: '320x240', 
+            filename: 'thumbnail-%b.png'
+        })
+    })
+   };
+module.exports = {
+    uploadFile,
+    gwnerateThumbnail
 }

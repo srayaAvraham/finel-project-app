@@ -1,11 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { login } from './userAPI';
+import { login, signup } from './userAPI';
 
 const initialState = {
-  user:localStorage.getItem("user")
-  ? JSON.parse(localStorage.getItem("user"))
-  : null,
-  status: 'idle',
+    name: '',
+    email: '',
+    isFetching: false,
+    isSuccess: false,
+    isError: false,
+    errorMessage: '',
 };
 
 
@@ -17,6 +19,19 @@ export const loginAsync = createAsyncThunk(
   }
 );
 
+export const signupUser = createAsyncThunk(
+    'user/signupUser',
+    async ({ name, email, password }, {rejectWithValue}) => {
+        try{
+            const response = await signup({ name, email, password });
+            console.log(response)
+            return response.data;
+        }catch(err){
+            rejectWithValue(err)
+        }
+    }
+)
+
 export const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -24,6 +39,13 @@ export const userSlice = createSlice({
     logout: (state, action) => {
         state.user = null;
         localStorage.removeItem("user");
+      },
+    clearState: (state) => {
+        state.isError = false;
+        state.isSuccess = false;
+        state.isFetching = false;
+  
+        //return state;
       },
   },
   extraReducers: (builder) => {
@@ -35,13 +57,27 @@ export const userSlice = createSlice({
         state.status = 'idle';
         state.user = action.payload;
         localStorage.setItem("user", JSON.stringify(action.payload));
-      });
+      })
+      .addCase(signupUser.fulfilled, (state, action) => {
+        state.isFetching = false;
+        state.isSuccess = true;
+        state.email = action.payload.email;
+        state.name = action.payload.name;
+      })
+      .addCase(signupUser.pending, (state) => {
+        state.status = 'loading';
+      }) 
+      .addCase(signupUser.rejected, (state, { payload }) => {
+        state.isFetching = false;
+        state.isError = true;
+        state.errorMessage = payload.message;
+      })
   },
 });
 
-export const { logout } = userSlice.actions;
+export const { logout, clearState } = userSlice.actions;
 
-export const selectUser = (state) => state.user.user;
+export const userSelector = (state) => state.user;
 export const selectStatus = (state) => state.user.status;
 
 

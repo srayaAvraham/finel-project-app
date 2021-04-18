@@ -1,10 +1,23 @@
 const express = require('express');
 const app = express();
+const cors = require("cors");
+const mongoose = require('mongoose');
 const port = process.env.PORT || 5000;
 const scoreRouter = require('./routes/score');
 const uploadRouter = require('./routes/upload');
 const usersRouter = require('./routes/users');
 
+
+let corsOptions = {
+  origin: "*",
+};
+
+mongoose.connect('mongodb://localhost:27017/myapp', {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
+mongoose.connection.on("connected", () => console.log("connected"))
+mongoose.connection.on("disconnected", () => console.log("disconnected"))
+mongoose.connection.on("error", () => console.log("error"))
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(
   express.urlencoded({
@@ -16,7 +29,7 @@ app.get('/', (req, res) => {
   res.json({'message': 'ok'});
 })
 
-app.use('/users', usersRouter);
+app.use('/api/users', usersRouter);
 app.use('/score', scoreRouter);
 app.use('/upload', uploadRouter);
 

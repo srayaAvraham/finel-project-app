@@ -1,30 +1,30 @@
 import { Form, Input, Button, Alert } from "antd";
-import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
-import { useDispatch, useSelector } from "react-redux";
+import { LockOutlined, MailOutlined } from "@ant-design/icons";
+import { Link, useHistory } from "react-router-dom";
 import styles from "./User.module.css";
-import { Redirect, useHistory } from "react-router-dom";
-import { signupUser, userSelector, clearState } from './userSlice';
+import { useDispatch,useSelector } from "react-redux";
+import { loginUser, userSelector, clearState } from './userSlice';
 import { useEffect } from "react";
+import { unwrapResult } from "@reduxjs/toolkit";
 
-export const Signup = () => {
-  const history = useHistory();
+export const Login = () => {
   const dispatch = useDispatch();
-//   const [loading, setLoading] = useState(false);
-//   const [error, setError] = useState(null);
-const { isFetching, isSuccess, isError, errorMessage } = useSelector(
+  const history = useHistory();
+  const { isFetching, isSuccess, isError, errorMessage } = useSelector(
     userSelector
   );
 
   const onFinish = async (values) => {
-    dispatch(signupUser( values ));
+    dispatch(loginUser(values));
     // try {
-    //   setLoading(true);
-    //   await api.post("auth/signup/", { ...values });
+    //   setLoginRequestStatus("pending");
+    //   const resultAction = await dispatch(loginUser(values));
+    //   unwrapResult(resultAction);
     //   history.push("/");
-    //   setLoading(false);
     // } catch (err) {
-    //   setLoading(false);
-    //   setError(err.response.data.message);
+    //   setError(err.message);
+    // } finally {
+    //   setLoginRequestStatus("idle");
     // }
   };
   useEffect(() => {
@@ -34,17 +34,16 @@ const { isFetching, isSuccess, isError, errorMessage } = useSelector(
   }, []);
 
   useEffect(() => {
+    if (isError) {
+      dispatch(clearState());
+    }
+
     if (isSuccess) {
       dispatch(clearState());
       history.push('/');
     }
+  }, [isError, isSuccess]);
 
-    if (isError) {
-      console.log(errorMessage);
-      dispatch(clearState());
-    }
-  }, [isSuccess, isError]);
-  
   return (
     <div className={styles.center}>
       <Form
@@ -52,20 +51,6 @@ const { isFetching, isSuccess, isError, errorMessage } = useSelector(
         className={styles.loginForm}
         onFinish={onFinish}
       >
-        <Form.Item
-          name="name"
-          rules={[
-            {
-              required: true,
-              message: "Please input your Username!",
-            },
-          ]}
-        >
-          <Input
-            prefix={<UserOutlined className={styles.siteFormItemIcon} />}
-            placeholder="Username"
-          />
-        </Form.Item>
         <Form.Item
           name="email"
           rules={[
@@ -106,8 +91,9 @@ const { isFetching, isSuccess, isError, errorMessage } = useSelector(
             className={styles.loginFormButton}
             loading={isFetching}
           >
-            Register
+            Log in
           </Button>
+          Or <Link to={"/register"}>register now!</Link>
         </Form.Item>
         {errorMessage && <Alert message={errorMessage} type="error" />}
       </Form>

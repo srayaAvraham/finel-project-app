@@ -16,14 +16,19 @@ router.get("/auth", auth, (req, res) => {
 
 router.post("/register", (req, res) => {
 
-    const user = new User(req.body);
-
-    user.save((err, doc) => {
-        if (err) return res.json({ success: false, err });
-        return res.status(200).json({
-            success: true
-        });
-    });
+    const user = new User({
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password,
+      });
+    
+      user.save((err) => {
+        if (err) {
+          res.status(500).send({ message: err });
+          return;
+        }
+         res.send({ message: "User was registered successfully!" });
+      });
 });
 
 router.post("/login", (req, res) => {
@@ -36,7 +41,7 @@ router.post("/login", (req, res) => {
 
         user.comparePassword(req.body.password, (err, isMatch) => {
             if (!isMatch)
-                return res.status(401).res.json({ loginSuccess: false, message: "Wrong password" });
+                return res.status(401).json({ loginSuccess: false, message: "Wrong password" });
 
             user.generateToken((err, user) => {
                 if (err) return res.status(400).send(err);

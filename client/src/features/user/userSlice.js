@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { login, signup } from './userAPI';
+import api from "../../helpers/api";
 
 const initialState = {
     name: '',
@@ -11,11 +12,19 @@ const initialState = {
 };
 
 
-export const loginAsync = createAsyncThunk(
+export const loginUser = createAsyncThunk(
   'user/login',
-  async ({ email, password }) => {
-    const response = await login({ email, password });
-    return response.data;
+  async ({ email, password }, {rejectWithValue}) => {
+      try{
+        const response = await api.post("/users/login", { email, password });
+        if (response.status === 200) {
+            localStorage.setItem('token', response.data.token);
+        }
+        return response.data;
+      }catch(err){
+        return rejectWithValue(err)
+      }
+
   }
 );
 
@@ -23,11 +32,11 @@ export const signupUser = createAsyncThunk(
     'user/signupUser',
     async ({ name, email, password }, {rejectWithValue}) => {
         try{
-            const response = await signup({ name, email, password });
+            const response = await api.post("/users/register", { name, email, password });
             console.log(response)
             return response.data;
         }catch(err){
-            rejectWithValue(err)
+           return rejectWithValue(err)
         }
     }
 )
@@ -50,24 +59,23 @@ export const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(loginAsync.pending, (state) => {
+      .addCase(loginUser.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(loginAsync.fulfilled, (state, action) => {
-        state.status = 'idle';
-        state.user = action.payload;
-        localStorage.setItem("user", JSON.stringify(action.payload));
-      })
-      .addCase(signupUser.fulfilled, (state, action) => {
-        state.isFetching = false;
+    //   .addCase(loginUser.fulfilled, (state, action) => {
+    //     state.status = 'idle';
+    //     state.user = action.payload;
+    //     localStorage.setItem("user", JSON.stringify(action.payload));
+    //   })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        console.log("scsses")
         state.isSuccess = true;
-        state.email = action.payload.email;
-        state.name = action.payload.name;
       })
       .addCase(signupUser.pending, (state) => {
         state.status = 'loading';
       }) 
       .addCase(signupUser.rejected, (state, { payload }) => {
+          console.log("reject")
         state.isFetching = false;
         state.isError = true;
         state.errorMessage = payload.message;

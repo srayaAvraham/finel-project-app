@@ -1,0 +1,26 @@
+.gridContainer {
+  display: grid;
+  grid-template-columns: 0.6fr 1.4fr;
+  grid-template-rows: 0.3fr 1.6fr 1.6fr 0.5fr;
+  gap: 0px 0px;
+  grid-template-areas:
+    "header header"
+    "video-list video-1"
+    "video-list video-2"
+    "video-list result";
+}
+.videoList {
+  grid-area: video-list;
+}
+.header {
+  grid-area: header;
+}
+.video1 {
+  grid-area: video-1;
+}
+.video2 {
+  grid-area: video-2;
+}
+.result {
+  grid-area: result;
+}

@@ -3,8 +3,9 @@ import { login, signup } from './userAPI';
 import api from "../../helpers/api";
 
 const initialState = {
-    name: '',
-    email: '',
+    userDetails:  localStorage.getItem("user")
+    ? JSON.parse(localStorage.getItem("user"))
+    : null,
     isFetching: false,
     isSuccess: false,
     isError: false,
@@ -17,9 +18,6 @@ export const loginUser = createAsyncThunk(
   async ({ email, password }, {rejectWithValue}) => {
       try{
         const response = await api.post("/users/login", { email, password });
-        if (response.status === 200) {
-            localStorage.setItem('token', response.data.token);
-        }
         return response.data;
       }catch(err){
         return rejectWithValue(err)
@@ -53,8 +51,6 @@ export const userSlice = createSlice({
         state.isError = false;
         state.isSuccess = false;
         state.isFetching = false;
-  
-        //return state;
       },
   },
   extraReducers: (builder) => {
@@ -62,15 +58,14 @@ export const userSlice = createSlice({
       .addCase(loginUser.pending, (state) => {
         state.status = 'loading';
       })
-    //   .addCase(loginUser.fulfilled, (state, action) => {
-    //     state.status = 'idle';
-    //     state.user = action.payload;
-    //     localStorage.setItem("user", JSON.stringify(action.payload));
-    //   })
       .addCase(loginUser.fulfilled, (state, action) => {
         console.log("scsses")
         state.isSuccess = true;
+        localStorage.setItem("user", JSON.stringify(action.payload));
       })
+      .addCase(signupUser.fulfilled, (state, action) => {
+        state.isSuccess = true;
+          })
       .addCase(signupUser.pending, (state) => {
         state.status = 'loading';
       }) 

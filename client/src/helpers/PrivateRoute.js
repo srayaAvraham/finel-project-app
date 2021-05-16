@@ -1,11 +1,13 @@
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
-
-export const PrivateRoute = ({ component: Component, ...rest }) => (
-  <Route
+import { useSelector } from "react-redux";
+import { userSelector } from "../features/user/userSlice";
+export const PrivateRoute = ({ component: Component, ...rest }) => {
+    const user = useSelector(userSelector);
+  return <Route
     {...rest}
     render={(props) =>
-      localStorage.getItem('token') ? (
+        user? (
         <Component {...props} />
       ) : (
         <Redirect
@@ -14,4 +16,4 @@ export const PrivateRoute = ({ component: Component, ...rest }) => (
       )
     }
   />
-);
+};

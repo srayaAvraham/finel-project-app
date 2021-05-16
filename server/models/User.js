@@ -21,6 +21,9 @@ const userSchema = mongoose.Schema({
         type:String,
         maxlength: 50
     },
+    token:{
+        type:String,
+    }
 
 })
 
@@ -52,9 +55,9 @@ userSchema.methods.comparePassword = function(plainPassword,cb){
 }
 
 userSchema.methods.generateToken = function(cb) {
-    var user = this;
-    var token =  jwt.sign(user._id.toHexString(),'secret')
-
+    let user = this;
+    let token =  jwt.sign(user._id.toHexString(),'secret')
+  console.log(token)
     user.token = token;
     user.save(function (err, user){
         if(err) return cb(err)
@@ -63,7 +66,7 @@ userSchema.methods.generateToken = function(cb) {
 }
 
 userSchema.statics.findByToken = function (token, cb) {
-    var user = this;
+    let user = this;
 
     jwt.verify(token,'secret',function(err, decode){
         user.findOne({"_id":decode, "token":token}, function(err, user){

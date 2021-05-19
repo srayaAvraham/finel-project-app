@@ -2,22 +2,19 @@ const express = require('express');
 const app = express();
 const cors = require("cors");
 const mongoose = require('mongoose');
+const logger = require('morgan');
 const port = process.env.PORT || 5000;
 const scoreRouter = require('./routes/score');
 const uploadRouter = require('./routes/upload');
 const usersRouter = require('./routes/users');
 
-
+require('./services/db');
 let corsOptions = {
   origin: "*",
 };
 
-mongoose.connect('mongodb://localhost:27017/myapp', {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
-mongoose.connection.on("connected", () => console.log("connected"))
-mongoose.connection.on("disconnected", () => console.log("disconnected"))
-mongoose.connection.on("error", () => console.log("error"))
-
 app.use(cors(corsOptions));
+app.use(logger('dev'));
 app.use(express.json());
 app.use(
   express.urlencoded({

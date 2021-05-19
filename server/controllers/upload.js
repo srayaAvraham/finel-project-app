@@ -37,6 +37,7 @@ const uploadFile = (req, filePath) => {
    const gwnerateThumbnail = (req, videoPath) => {
     let fileName = ""
     let fileDuration = ""
+    let filePath= ""
     
     ffmpeg.ffprobe(videoPath, function(err, metadata) {
         console.log(err)

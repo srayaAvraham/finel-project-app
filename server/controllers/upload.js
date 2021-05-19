@@ -40,7 +40,6 @@ const uploadFile = (req, filePath) => {
     let filePath= ""
     
     ffmpeg.ffprobe(videoPath, function(err, metadata) {
-        console.log(err)
         console.dir(metadata); // all metadata
         console.log(metadata.format.duration);
         fileDuration = metadata.format.duration

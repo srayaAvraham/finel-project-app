@@ -21,6 +21,10 @@ const videoSchema = mongoose.Schema({
     },
     thumbnail: {
         type: String
+    },
+    parent:{
+        type: Schema.Types.ObjectId,
+        ref: 'Video'
     }
 },{timestamps:true})
 

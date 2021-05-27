@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { gwnerateThumbnail } = require('../controllers/upload')
+const { gwnerateThumbnail, uploadToDrive } = require('../controllers/upload')
 const Minio = require('minio')
 const fs = require('fs')
 const upload = require('../services/storage')
@@ -9,8 +9,8 @@ const minioClient = new Minio.Client({
   endPoint: 'localhost',
   port: 9000,
   useSSL: false,
-  accessKey: 'minioadmin',
-  secretKey: 'minioadmin'
+  accessKey: 'miniominio',
+  secretKey: 'miniominio'
 });
 // function fileUpload(req, res, next) {
 //   upload.gridFS.single('myFile')(req, res, next => {
@@ -29,23 +29,26 @@ router.post('/', upload.disk.single('myFile'), async function(req, res) {
     let metadata = await gwnerateThumbnail(req, file.path)
     console.log(metadata)
     try{
-      let  video_etag = await minioClient.fPutObject("videos" , file.filename,file.path,{})
-      let  thumbnail_etag = await minioClient.fPutObject("thumbnail" , metadata.fileName,metadata.url,{})
+      
+      
+      await minioClient.fPutObject("videos" , file.filename,file.path,{})
+      await minioClient.fPutObject("thumbnail" , metadata.fileName,metadata.url,{})
 
       const document = {
           title: "aaa",
           description: "aaaa",
-          filePath: video_etag,
+          filePath: minioClient.protocol + '//' + minioClient.host + ':' + minioClient.port + '/' + 'videos' + '/' + file.filename,
           duration: metadata.fileDuration,
-          thumbnail: thumbnail_etag
+          thumbnail: minioClient.protocol + '//' + minioClient.host + ':' + minioClient.port + '/' + 'thumbnail' + '/' + metadata.fileName
       }
       let video = new Video(document);
-      video.save().then((doc, err) => {
-        console.log(err);
-        fs.unlinkSync(file.path);
-        fs.unlinkSync(metadata.url);
-        res.send({ status: 'success', doc }) 
-      })
+      let doc = await video.save();
+      console.log(doc);
+      // let drive = await uploadToDrive(file.path , file.filename, file.mimetype);
+      // console.log(drive)
+      fs.unlinkSync(file.path);
+      fs.unlinkSync(metadata.url);
+      res.send({ status: 'success', doc }) 
 
     }catch(err){
       console.log(err)
@@ -53,14 +56,5 @@ router.post('/', upload.disk.single('myFile'), async function(req, res) {
     }
 
 });
-
-// router.get("/download", function(request, response) {
-//   minioClient.("videos", request.query.filename, function(error, stream) {
-//       if(error) {
-//           return response.status(500).send(error);
-//       }
-//       stream.pipe(response);
-//   });
-// });
 
 module.exports = router;

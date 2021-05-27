@@ -1,15 +1,32 @@
-import useSelection from "antd/lib/table/hooks/useSelection";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch  } from "react-redux";
+import { List, Avatar } from 'antd';
+import { Video } from "./Video";
+import { videoListSelector, videoListStatus, getVideos } from "./videoSlice";
+import { useEffect } from "react";
 
-export function videoList() {
 
-    const videoList = useSelector(getVideoList) || [];
-    return (
+export function VideoList() {
+  const dispatch = useDispatch();
 
-      <div className={styles.gridContainer}>
-        {videoList.map((item) => {
-            <div>item.name</div>
-        })}
-      </div>
-    );
-  }
+  const videoList = useSelector(videoListSelector);
+  const videoStatus = useSelector(videoListStatus);
+
+  useEffect(() => {
+    console.log(videoStatus)
+    if (videoStatus === 'idle') {
+      console.log('fetch')
+      dispatch(getVideos())
+    }
+  }, [videoStatus, dispatch]);
+
+  return (
+    <List
+      itemLayout="horizontal"
+      dataSource={videoList}
+      // loading={videoStatus}
+      renderItem={item => (
+        <Video video={item}/>
+      )}
+    />
+  );
+}

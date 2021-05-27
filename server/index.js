@@ -7,6 +7,7 @@ const port = process.env.PORT || 5000;
 const scoreRouter = require('./routes/score');
 const uploadRouter = require('./routes/upload');
 const usersRouter = require('./routes/users');
+const videosRouter = require('./routes/videos');
 
 require('./services/db');
 let corsOptions = {
@@ -27,6 +28,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api/users', usersRouter);
+app.use('/api/media', videosRouter);
 app.use('/score', scoreRouter);
 app.use('/upload', uploadRouter);
 

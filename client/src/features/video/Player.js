@@ -3,7 +3,7 @@ import styles from './Video.module.css';
 
 export const Player = ({ url }) => {
     return (
-        <div className={styles.playerWrapper}><ReactPlayer className={styles.reactPlayer} url={url} controls={true} width='60%'
-            height='50%' /></div>
+        <div className={styles.playerWrapper}><ReactPlayer className={styles.reactPlayer} url={url} controls={true} 
+             /></div>
     )
 }

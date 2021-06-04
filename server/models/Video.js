@@ -25,6 +25,9 @@ const videoSchema = mongoose.Schema({
     parent:{
         type: Schema.Types.ObjectId,
         ref: 'Video'
+    },
+    isPatient:{
+        type: Boolean,
     }
 },{timestamps:true})
 

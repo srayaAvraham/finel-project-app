@@ -5,6 +5,7 @@ import {Signup} from './features/user/Signup';
 import { PrivateRoute } from './helpers/PrivateRoute';
 import './App.css';
 import { Dashboard } from './features/video/Dashboard';
+import { MyLayout } from './components/Layout';
 
 function App() {
   return (
@@ -13,7 +14,7 @@ function App() {
         <Switch>
           <Route exact component={Login} path="/login" />
           <Route exact component={Signup} path="/register" />
-          <PrivateRoute exact component={Dashboard} path="/" />
+          <PrivateRoute exact component={MyLayout} path="/" />
         </Switch>
       </Router>
     </div>

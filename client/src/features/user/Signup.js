@@ -3,7 +3,7 @@ import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./User.module.css";
 import { Redirect, useHistory } from "react-router-dom";
-import { signupUser, userSelector, clearState } from './userSlice';
+import { signupUser, selectStatus, clearState } from './userSlice';
 import { useEffect } from "react";
 
 export const Signup = () => {
@@ -12,7 +12,7 @@ export const Signup = () => {
 //   const [loading, setLoading] = useState(false);
 //   const [error, setError] = useState(null);
 const { isFetching, isSuccess, isError, errorMessage } = useSelector(
-    userSelector
+  selectStatus
   );
 
   const onFinish = async (values) => {

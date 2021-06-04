@@ -12,9 +12,21 @@ const minioClient = new Minio.Client({
   accessKey: 'miniominio',
   secretKey: 'miniominio'
 });
+
 router.get('/all', async function(req, res) {
   try {
-    const result = await Video.find();
+    const result = await Video.find({isPatient: false});
+    res.json(result)
+  } catch (err) {
+    res.status(500).send(err)
+  }
+});
+
+router.get('/video/:id/:userId', async function(req, res) {
+  let { id, userId } = req.params;
+
+  try {
+    const result = await Video.find({isPatient: true, parent: id , writer: userId});
     res.json(result)
   } catch (err) {
     res.status(500).send(err)
@@ -52,14 +64,14 @@ router.get("/picture/:id", function(req, res) {
     });
   });
 
-  router.get("/video/:id", function(req, res) {
-    console.log(req.params)
-    minioClient.getObject("videos", 'thumbnail-myFile-1621609754762.png' , function(error, stream) {
-        if(error) {
-            return res.status(500).send(error);
-        }
-        stream.pipe(res);
-    });
-  });
+  // router.get("/video/:id", function(req, res) {
+  //   console.log(req.params)
+  //   minioClient.getObject("videos", 'thumbnail-myFile-1621609754762.png' , function(error, stream) {
+  //       if(error) {
+  //           return res.status(500).send(error);
+  //       }
+  //       stream.pipe(res);
+  //   });
+  // });
 
 module.exports = router;

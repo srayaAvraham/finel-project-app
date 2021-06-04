@@ -3,7 +3,7 @@ import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import { Link, useHistory } from "react-router-dom";
 import styles from "./User.module.css";
 import { useDispatch,useSelector } from "react-redux";
-import { loginUser, userSelector, clearState } from './userSlice';
+import { loginUser, userSelector, clearState, selectStatus } from './userSlice';
 import { useEffect } from "react";
 import { unwrapResult } from "@reduxjs/toolkit";
 
@@ -11,11 +11,13 @@ export const Login = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const { isFetching, isSuccess, isError, errorMessage } = useSelector(
-    userSelector
+    selectStatus
   );
 
   const onFinish = async (values) => {
     dispatch(loginUser(values));
+    console.log(values)
+    history.push("/");
     // try {
     //   setLoginRequestStatus("pending");
     //   const resultAction = await dispatch(loginUser(values));

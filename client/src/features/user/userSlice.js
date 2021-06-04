@@ -20,6 +20,7 @@ export const loginUser = createAsyncThunk(
         const response = await api.post("/users/login", { email, password });
         return response.data;
       }catch(err){
+        console.log(err)
         return rejectWithValue(err)
       }
 
@@ -61,6 +62,7 @@ export const userSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         console.log("scsses")
         state.isSuccess = true;
+        state.userDetails = action.payload
         localStorage.setItem("user", JSON.stringify(action.payload));
       })
       .addCase(signupUser.fulfilled, (state, action) => {
@@ -80,8 +82,9 @@ export const userSlice = createSlice({
 
 export const { logout, clearState } = userSlice.actions;
 
-export const userSelector = (state) => state.user;
-export const selectStatus = (state) => state.user.status;
+export const userSelector = (state) => state.user.userDetails;
+export const selectStatus = (state) => state.user;
+
 
 
 export default userSlice.reducer;

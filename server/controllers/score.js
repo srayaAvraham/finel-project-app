@@ -10,7 +10,7 @@ function runPython(){
                 console.log("finished");
                 resolve(result);
             })
-        }catch{
+        }catch(err){
             console.log("Error with python")
             reject();
         }

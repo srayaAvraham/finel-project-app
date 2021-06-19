@@ -4,7 +4,6 @@ import {Login} from './features/user/Login';
 import {Signup} from './features/user/Signup';
 import { PrivateRoute } from './helpers/PrivateRoute';
 import './App.css';
-import { Dashboard } from './features/video/Dashboard';
 import { MyLayout } from './components/Layout';
 
 function App() {

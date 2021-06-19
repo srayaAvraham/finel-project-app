@@ -28,11 +28,11 @@ router.post('/', upload.disk.single('myFile'), async function(req, res) {
       const document = {
           title: title,
           description: description,
-          filePath: minioClient.protocol + '//' + minioClient.host + ':' + minioClient.port + '/' + 'videos' + '/' + file.filename,
+          videoPath: minioClient.protocol + '//' + minioClient.host + ':' + minioClient.port + '/' + 'videos' + '/' + file.filename,
           duration: metadata.fileDuration,
           thumbnail: minioClient.protocol + '//' + minioClient.host + ':' + minioClient.port + '/' + 'thumbnail' + '/' + metadata.fileName,
           isPatient: false,
-          writer: user
+          uploader: user
 
       }
       let video = new Video(document);
@@ -62,12 +62,12 @@ router.post('/:parentId/:user', upload.disk.single('myFile'), async function(req
     await minioClient.fPutObject("thumbnail" , metadata.fileName,metadata.url,{})
 
     const document = {
-        filePath: minioClient.protocol + '//' + minioClient.host + ':' + minioClient.port + '/' + 'videos' + '/' + file.filename,
+        videoPath: minioClient.protocol + '//' + minioClient.host + ':' + minioClient.port + '/' + 'videos' + '/' + file.filename,
         duration: metadata.fileDuration,
         thumbnail: minioClient.protocol + '//' + minioClient.host + ':' + minioClient.port + '/' + 'thumbnail' + '/' + metadata.fileName,
-        parent: parentId,
+        physioVideoId: parentId,
         isPatient: true,
-        writer: user
+        uploader: user
     }
     let video = new Video(document);
     let doc = await video.save();

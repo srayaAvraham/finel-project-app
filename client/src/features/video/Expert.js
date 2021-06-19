@@ -6,6 +6,6 @@ import { Player } from './Player';
 export const Expert = ({ url }) => {
     const current = useSelector(currentVideo);
     return (
-            <Player url={current.filePath} />
+            <Player url={current.videoPath} />
     )
 }

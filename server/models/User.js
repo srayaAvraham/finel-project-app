@@ -16,16 +16,9 @@ const userSchema = mongoose.Schema({
     password: {
         type: String,
         minglength: 8
-    },
-    lastname: {
-        type:String,
-        maxlength: 50
-    },
-    token:{
-        type:String,
     }
 
-})
+},{timestamps:true})
 
 
 userSchema.pre('save', function( next ) {

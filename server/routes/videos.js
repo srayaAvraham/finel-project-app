@@ -6,7 +6,7 @@ const fs = require('fs')
 
 
 const minioClient = new Minio.Client({
-  endPoint: 'localhost',
+  endPoint: 'minio',
   port: 9000,
   useSSL: false,
   accessKey: 'miniominio',
@@ -26,7 +26,7 @@ router.get('/video/:id/:userId', async function(req, res) {
   let { id, userId } = req.params;
 
   try {
-    const result = await Video.find({isPatient: true, parent: id , writer: userId});
+    const result = await Video.find({isPatient: true, physioVideoId: id , uploader: userId});
     res.json(result)
   } catch (err) {
     res.status(500).send(err)

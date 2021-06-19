@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const videoSchema = mongoose.Schema({
-    writer: {
+    uploader: {
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
@@ -13,7 +13,7 @@ const videoSchema = mongoose.Schema({
     description: {
         type: String,
     },
-    filePath : {
+    videoPath : {
         type: String, 
     },
     duration: {
@@ -22,13 +22,26 @@ const videoSchema = mongoose.Schema({
     thumbnail: {
         type: String
     },
-    parent:{
+    jsonPath:{
+        type: String
+    },
+    optimalGraphPath:{
+        type: String
+    },
+    towLineGraphPath:{
+        type: String
+    },
+    physioVideoId:{
         type: Schema.Types.ObjectId,
         ref: 'Video'
     },
+    score:{
+        type: String
+    },
     isPatient:{
         type: Boolean,
-    }
+    },
+
 },{timestamps:true})
 
 const Video = mongoose.model('Video', videoSchema);

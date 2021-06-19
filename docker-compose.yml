@@ -1,5 +1,21 @@
-version: "2"
+version: "3"
 services:
+  react-app:
+    build: ./client
+    ports: 
+      - "80:80"
+  api-server:
+    build: ./server
+    ports: 
+      - "5000:5000"
+    depends_on: 
+      - mongo
+      - minio 
+  mongo:
+    image: mongo
+    restart: always
+    ports: 
+      - "27017:27017"
   minio:
     image: minio/minio
     ports:

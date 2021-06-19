@@ -97,7 +97,12 @@ export const UploadModal= ({ visible, onCreate, onCancel }) => {
           <Input type="textarea" />
         </Form.Item>
         <Form.Item label="Dragger">
-        <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={handleUpload}  noStyle>
+        <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={handleUpload}  noStyle rules={[
+            {
+              required: true,
+              message: 'Please upload video!',
+            },
+          ]}>
           <Upload.Dragger name="files" beforeUpload={() => false}>
             <p className="ant-upload-drag-icon">
               <InboxOutlined />

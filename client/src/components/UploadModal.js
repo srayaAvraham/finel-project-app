@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { Button, Modal, Form, Input, Radio, Upload } from 'antd';
-import { UploadOutlined, InboxOutlined } from '@ant-design/icons';
+import { Modal, Form, Input, Radio, Upload } from 'antd';
+import { InboxOutlined } from '@ant-design/icons';
 import { addVideo } from '../features/video/videoSlice';
 import { useDispatch } from 'react-redux';
 import { useSelector } from "react-redux";
 import { userSelector } from "../features/user/userSlice";
 
-export const UploadModal= ({ visible, onCreate, onCancel }) => {
+export const UploadModal = ({ visible, onCreate, onCancel }) => {
   const [selectedFile, setSelectedFile] = useState();
   const [confirmLoading, setConfirmLoading] = React.useState(false);
-  const dispatch = useDispatch(); 
+  const dispatch = useDispatch();
   const [form] = Form.useForm();
 
   const user = useSelector(userSelector);
@@ -29,13 +29,12 @@ export const UploadModal= ({ visible, onCreate, onCancel }) => {
   const handleSubmission = (values) => {
     setConfirmLoading(true)
     const formData = new FormData();
-  
+
     formData.append('myFile', selectedFile[0].originFileObj);
     formData.append('title', values.title);
     formData.append('description', values.description);
-    debugger
     formData.append('user', user.id);
-  
+
     fetch(
       'http://localhost:5000/upload',
       {
@@ -51,6 +50,8 @@ export const UploadModal= ({ visible, onCreate, onCancel }) => {
       })
       .catch((error) => {
         console.error('Error:', error);
+      }).finally(() => {
+        form.resetFields();
       });
   };
   return (
@@ -60,12 +61,12 @@ export const UploadModal= ({ visible, onCreate, onCancel }) => {
       okText="Create"
       cancelText="Cancel"
       onCancel={onCancel}
+      cancelButtonProps={{ disabled: true }}
       confirmLoading={confirmLoading}
       onOk={() => {
         form
           .validateFields()
           .then((values) => {
-            form.resetFields();
             handleSubmission(values);
           })
           .catch((info) => {
@@ -97,21 +98,21 @@ export const UploadModal= ({ visible, onCreate, onCancel }) => {
           <Input type="textarea" />
         </Form.Item>
         <Form.Item label="Dragger">
-        <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={handleUpload}  noStyle rules={[
-            {
-              required: true,
-              message: 'Please upload video!',
-            },
+          <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={handleUpload} noStyle rules={[
+            // {
+            //   required: true,
+            //   message: 'Please upload video!',
+            // },
           ]}>
-          <Upload.Dragger name="files" beforeUpload={() => false}>
-            <p className="ant-upload-drag-icon">
-              <InboxOutlined />
-            </p>
-            <p className="ant-upload-text">Click or drag file to this area to upload</p>
-            <p className="ant-upload-hint">Support for a single or bulk upload.</p>
-          </Upload.Dragger>
+            <Upload.Dragger maxCount={1} name="files" beforeUpload={() => false}>
+              <p className="ant-upload-drag-icon">
+                <InboxOutlined />
+              </p>
+              <p className="ant-upload-text">Click or drag file to this area to upload</p>
+              <p className="ant-upload-hint">Support for a single or bulk upload.</p>
+            </Upload.Dragger>
+          </Form.Item>
         </Form.Item>
-      </Form.Item>
       </Form>
     </Modal>
   );

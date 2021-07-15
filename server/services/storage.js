@@ -6,7 +6,7 @@ const { uuid } = require('uuidv4');
 
 const minioClient = new Minio.Client({
     endPoint: 'localhost',
-    port: 9000,
+    port: 9003,
     useSSL: false,
     accessKey: 'minioadmin',
     secretKey: 'minioadmin'

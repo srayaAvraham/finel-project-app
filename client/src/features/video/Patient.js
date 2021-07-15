@@ -5,11 +5,12 @@ import { currentVideo } from './videoSlice';
 
 export const Patient = () => {
     const current = useSelector(currentVideo);
-    const video =  current && current.patient ? 
+    debugger
+    if(current){
+        return current.patient ? 
         <Player url={current.patient.videoPath}/> :
         <UploadVideo/>
-     console.log(current)
-    return video;
-
-    
+    } else {
+        return;
+    }
 }

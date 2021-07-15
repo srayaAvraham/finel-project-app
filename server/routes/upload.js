@@ -16,21 +16,26 @@ const minioClient = new Minio.Client({
 
 router.post('/', upload.disk.single('myFile'), async function(req, res) {
     const { file } = req;
-    console.log("=========================")
     let [title, description, user] = Object.values(req.body)
     let metadata = await gwnerateThumbnail(req, file.path)
-    // console.log(metadata)
     try{
-      
-      await minioClient.fPutObject("videos" , file.filename,file.path,{})
-      await minioClient.fPutObject("thumbnail" , metadata.fileName,metadata.url,{})
+      minioClient.bucketExists('practfix-minio', function(err, exists) {
+        if (err) {
+          return console.log(err)
+        }
+        if (exists) {
+          return console.log('Bucket exists.')
+        }
+      })
+      await minioClient.fPutObject("practfix-minio" , `videos/${file.filename}`,file.path,{})
+      await minioClient.fPutObject("practfix-minio" , `thumbnail/${metadata.fileName}`,metadata.url,{})
 
       const document = {
           title: title,
           description: description,
-          videoPath: minioClient.protocol + '//' + minioClient.host + ':' + minioClient.port + '/' + 'videos' + '/' + file.filename,
+          videoPath: minioClient.protocol + '//' + minioClient.host + ':' + minioClient.port + '/' + 'practfix-minio/videos' + '/' + file.filename,
           duration: metadata.fileDuration,
-          thumbnail: minioClient.protocol + '//' + minioClient.host + ':' + minioClient.port + '/' + 'thumbnail' + '/' + metadata.fileName,
+          thumbnail: minioClient.protocol + '//' + minioClient.host + ':' + minioClient.port + '/' + 'practfix-minio/thumbnail' + '/' + metadata.fileName,
           isPatient: false,
           uploader: user
 
@@ -39,7 +44,6 @@ router.post('/', upload.disk.single('myFile'), async function(req, res) {
       let doc = await video.save();
       console.log(doc);
       let drive = await uploadToDrive(file.path , "physio" + '_' + doc._id + path.extname(file.filename), file.mimetype);
-      console.log(drive)
       fs.unlinkSync(file.path);
       fs.unlinkSync(metadata.url);
       res.send({ status: 'success', doc }) 
@@ -58,13 +62,13 @@ router.post('/:parentId/:user', upload.disk.single('myFile'), async function(req
   let metadata = await gwnerateThumbnail(req, file.path)
   try{
     
-    await minioClient.fPutObject("videos" , file.filename,file.path,{})
-    await minioClient.fPutObject("thumbnail" , metadata.fileName,metadata.url,{})
+    await minioClient.fPutObject("practfix-minio" , `videos/${file.filename}`,file.path,{})
+    await minioClient.fPutObject("practfix-minio" , `thumbnail/${metadata.fileName}`,metadata.url,{})
 
     const document = {
-        videoPath: minioClient.protocol + '//' + minioClient.host + ':' + minioClient.port + '/' + 'videos' + '/' + file.filename,
+        videoPath: minioClient.protocol + '//' + minioClient.host + ':' + minioClient.port + '/' + 'practfix-minio/videos' + '/' + file.filename,
         duration: metadata.fileDuration,
-        thumbnail: minioClient.protocol + '//' + minioClient.host + ':' + minioClient.port + '/' + 'thumbnail' + '/' + metadata.fileName,
+        thumbnail: minioClient.protocol + '//' + minioClient.host + ':' + minioClient.port + '/' + 'practfix-minio/thumbnail' + '/' + metadata.fileName,
         physioVideoId: parentId,
         isPatient: true,
         uploader: user
@@ -74,7 +78,7 @@ router.post('/:parentId/:user', upload.disk.single('myFile'), async function(req
     console.log(doc);
     let drive = await uploadToDrive(file.path , "patient" + '_' + doc._id + path.extname(file.filename), file.mimetype);
     console.log(drive)
-    console.log(file.path)
+    console.log(file.path);
     fs.unlinkSync(file.path);
     fs.unlinkSync(metadata.url);
     res.send({ status: 'success', doc }) 

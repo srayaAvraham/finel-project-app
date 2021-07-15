@@ -30,7 +30,7 @@ export const UploadVideo = () => {
     },
   };
     return(
-        <Dragger {...props}>
+        <Dragger {...props} maxCount={1}>
         <p className="ant-upload-drag-icon">
           <InboxOutlined />
         </p>

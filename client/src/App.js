@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import {Login} from './features/user/Login';
 import {Signup} from './features/user/Signup';
 import { PrivateRoute } from './helpers/PrivateRoute';

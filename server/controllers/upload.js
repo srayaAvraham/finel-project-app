@@ -9,7 +9,7 @@ const gwnerateThumbnail = (req, videoPath) => {
     let filePath = ""
 
     ffmpeg.ffprobe(videoPath, function (err, metadata) {
-        console.dir(metadata); // all metadata
+        // console.dir(metadata); // all metadata
         // console.log(metadata.format.duration);
         fileDuration = metadata.format.duration
     });
@@ -81,7 +81,7 @@ const uploadToDrive = (filePath, name, mimetype) => {
                 access_type: 'offline',
                 scope: SCOPES,
             });
-            console.log('Authorize this app by visiting this url:', authUrl);
+            // console.log('Authorize this app by visiting this url:', authUrl);
             const rl = readline.createInterface({
                 input: process.stdin,
                 output: process.stdout,
@@ -123,7 +123,7 @@ const uploadToDrive = (filePath, name, mimetype) => {
                     console.error(err);
                     reject(err)
                 } else {
-                    console.log('File Id: ', file);
+                    // console.log('File Id: ', file);
                     resolve(file)
                 }
             });

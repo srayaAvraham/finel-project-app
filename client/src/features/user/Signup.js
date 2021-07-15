@@ -2,7 +2,7 @@ import { Form, Input, Button, Alert } from "antd";
 import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./User.module.css";
-import { Redirect, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { signupUser, selectStatus, clearState } from './userSlice';
 import { useEffect } from "react";
 

@@ -41,6 +41,10 @@ const videoSchema = mongoose.Schema({
     isPatient:{
         type: Boolean,
     },
+    status:{
+        type: String,
+        default: "panding"
+    }
 
 },{timestamps:true})
 

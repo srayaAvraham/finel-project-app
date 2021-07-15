@@ -54,18 +54,16 @@ export const videoSlice = createSlice({
         state.status = 'loading';
       })
       .addCase(getVideos.fulfilled, (state, { payload }) => {
-        console.log("done")
         state.videoList = payload;
         state.current = payload[0];
         getPatientVideo()
       })
       .addCase(getVideos.rejected, (state, { payload }) => {
-        console.log("reject")
         state.errorMessage = payload.message;
       })
       .addCase(getPatientVideo.fulfilled, (state, { payload }) => {
-        console.log("done")
-        state.current.patient = payload[0];
+        if(state.current)
+          state.current.patient = payload[0];
       })
   },
 });

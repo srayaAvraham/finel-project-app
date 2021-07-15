@@ -1,5 +1,4 @@
-import { Card, Avatar } from 'antd';
-import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
+import { Card } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentVideo, getPatientVideo} from "./videoSlice";
 import { userSelector } from "../../features/user/userSlice";

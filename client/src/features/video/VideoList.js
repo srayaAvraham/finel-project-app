@@ -1,9 +1,8 @@
 import { useSelector, useDispatch } from "react-redux";
-import { List, Avatar, Button} from 'antd';
+import { List} from 'antd';
 import { Video } from "./Video";
 import { videoListSelector, videoListStatus, getVideos } from "./videoSlice";
-import { useEffect, useState } from "react";
-import { UploadModal } from "../../components/UploadModal";
+import { useEffect } from "react";
 
 
 export function VideoList() {

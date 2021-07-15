@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "app": "concurrently \"npm run client\" \"npm run dev\"",
+    "debug": "concurrently \"npm run client\" \"npm run nodeDebug\"",
     "start": "node index.js",
     "dev": "nodemon index.js",
+    "nodeDebug": "node --inspect index.js",
     "client": "cd ../client/ && npm start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

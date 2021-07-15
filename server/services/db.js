@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
-
-const db = mongoose.connect('mongodb://localhost:27017/myapp', {useNewUrlParser: true, useCreateIndex: true});
+// mongodb+srv://admin:Aa123456@practfix.p2zat.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+const db = mongoose.connect('mongodb+srv://admin:Aa123456@practfix.p2zat.mongodb.net/practfix?retryWrites=true&w=majority', {useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
 // let gfs;
 mongoose.connection.on("connected", () => {
-    console.log("connected")
+    console.log("connected to mongodb")
 })
 mongoose.connection.on("disconnected", () => console.log("disconnected"))
 mongoose.connection.on("error", () => console.log("error"))

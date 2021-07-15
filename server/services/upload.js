@@ -9,8 +9,6 @@ const gwnerateThumbnail = (req, videoPath) => {
     let filePath = ""
 
     ffmpeg.ffprobe(videoPath, function (err, metadata) {
-        // console.dir(metadata); // all metadata
-        // console.log(metadata.format.duration);
         fileDuration = metadata.format.duration
     });
     return new Promise((resolve, reject) => {
@@ -123,7 +121,6 @@ const uploadToDrive = (filePath, name, mimetype) => {
                     console.error(err);
                     reject(err)
                 } else {
-                    // console.log('File Id: ', file);
                     resolve(file)
                 }
             });

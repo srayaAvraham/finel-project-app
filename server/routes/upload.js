@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { gwnerateThumbnail, uploadToDrive } = require('../controllers/upload')
+const { gwnerateThumbnail, uploadToDrive } = require('../services/upload')
 const Minio = require('minio')
 const fs = require('fs')
 const path = require('path');

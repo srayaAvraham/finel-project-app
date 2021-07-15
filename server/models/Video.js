@@ -7,14 +7,14 @@ const videoSchema = mongoose.Schema({
         ref: 'User'
     },
     title: {
-        type:String,
-        maxlength: 50 
+        type: String,
+        maxlength: 50
     },
     description: {
         type: String,
     },
-    videoPath : {
-        type: String, 
+    videoPath: {
+        type: String,
     },
     duration: {
         type: String
@@ -22,31 +22,31 @@ const videoSchema = mongoose.Schema({
     thumbnail: {
         type: String
     },
-    jsonPath:{
+    jsonPath: {
         type: String
     },
-    optimalGraphPath:{
+    optimalGraphPath: {
         type: String
     },
-    towLineGraphPath:{
+    towLineGraphPath: {
         type: String
     },
-    physioVideoId:{
+    physioVideoId: {
         type: Schema.Types.ObjectId,
         ref: 'Video'
     },
-    score:{
+    score: {
         type: String
     },
-    isPatient:{
+    isPatient: {
         type: Boolean,
     },
-    status:{
+    status: {
         type: String,
         default: "panding"
     }
 
-},{timestamps:true})
+}, { timestamps: true })
 
 const Video = mongoose.model('Video', videoSchema);
 

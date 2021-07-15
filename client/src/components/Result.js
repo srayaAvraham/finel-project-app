@@ -74,7 +74,7 @@ export const MyResult = () => {
         title={`Great, you did a good job your score ${Math.round(score)}`}
         extra={<div><Button onClick={() => download(patient.optimalGraphPath)} >Download optimal graph</Button><Button onClick={() => download(patient.twoLineGraphPath)} >Download two line graph</Button></div>}
       />
-    } else if (status === "pending") {
+    } else if (status === "panding") {
       return <Result title="We are working on it, we will send you an email when we finish" />
     }
     return <Result

@@ -6,11 +6,13 @@ import { useState } from 'react';
 import { Expert } from '../features/video/Expert';
 import { Patient } from '../features/video/Patient';
 import { MyResult } from './Result';
+import { currentVideo } from '../features/video/videoSlice';
+import { useSelector } from 'react-redux';
 
 const { Header, Content, Footer, Sider } = Layout;
 export const MyLayout = () => {
   const [visible, setVisible] = useState(false);
-
+  const current = useSelector(currentVideo);
   const onCollapse = collapsed => {
     console.log(collapsed);
 
@@ -63,8 +65,9 @@ export const MyLayout = () => {
     </Button> */}
       </Sider>
       <Layout className="site-layout" style={{ marginLeft: 200 }}>
-        <Header className="site-layout-background" style={{ padding: 0 }} />
+        <Header className="site-layout-background" style={{ padding: 0, textAlign: 'center' }} ><strong>{current.title}</strong></Header>
         <Content style={{ margin: '10px auto', overflow: 'initial', width: "90%", }}>
+        
           <div className="site-layout-background" style={{ padding: 24, textAlign: 'center', margin: '10px auto', display: "flex", flexWrap: "wrap" }}>
             <div style={{ width: "50%" }}>
               <Expert />
